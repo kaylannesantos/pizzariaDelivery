@@ -1,20 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import psycopg2
-
-# Função para conectar ao banco de dados PostgreSQL
-def conectar_bd():
-    try:
-        return psycopg2.connect(
-            dbname="pizzaria",
-            user="postgres",
-            password="123",
-            host="localhost",
-            port="5432"
-        )
-    except Exception as e:
-        messagebox.showerror("Erro", f"Erro ao conectar ao banco de dados: {e}")
-        return None
+from database import conectar_bd
 
 # Função de autenticação (simulação)
 def autenticar():
@@ -30,7 +16,7 @@ def autenticar():
 def listar_pedidos(tree):
     conn = conectar_bd()
     cursor = conn.cursor()
-    cursor.execute("SELECT cliente, endereco, tamanho, sabor FROM pedidos")
+    cursor.execute("SELECT id, cliente, endereco, tamanho, sabor FROM pedidos")
     pedidos = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -38,7 +24,7 @@ def listar_pedidos(tree):
     tree.delete(*tree.get_children())  # Limpa a tabela antes de preencher novamente
 
     for pedido in pedidos:
-        tree.insert("", "end", values=pedido)
+        tree.insert("", "end", iid=pedido[0], values=pedido)  # Incluindo o ID corretamente
 
 # Função para excluir pedido
 def excluir_pedido(tree):
@@ -48,7 +34,7 @@ def excluir_pedido(tree):
         return
 
     item = tree.item(selecionado)["values"]
-    pedido_id = item[0]
+    pedido_id = tree.selection()[0]  # O iid do item é o ID do pedido
 
     conn = conectar_bd()
     cursor = conn.cursor()
@@ -67,8 +53,7 @@ def atualizar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, entry_sab
         messagebox.showerror("Erro", "Selecione um pedido para atualizar!")
         return
 
-    item = tree.item(selecionado)["values"]
-    pedido_id = item[0]
+    pedido_id = selecionado[0]  # Obtendo o ID do pedido corretamente
 
     novo_cliente = entry_cliente.get()
     novo_endereco = entry_endereco.get()
@@ -244,8 +229,8 @@ def abrir_tela_pedido():
     frame_tabela = tk.Frame(tela_pedido)
     frame_tabela.pack(pady=10)
 
-    tree = ttk.Treeview(frame_tabela, columns=("Cliente", "Endereço", "Tamanho", "Sabor"), show="headings")
-    #tree.heading("ID", text="ID")
+    tree = ttk.Treeview(frame_tabela, columns=("ID","Cliente", "Endereço", "Tamanho", "Sabor"), show="headings")
+    tree.column("ID", width=0, stretch=tk.NO)
     tree.heading("Cliente", text="Cliente")
     tree.heading("Endereço", text="Endereço")
     tree.heading("Tamanho", text="Tamanho")

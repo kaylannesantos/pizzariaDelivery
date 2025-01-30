@@ -8,21 +8,24 @@ CREATE TABLE clientes (
     bairro VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE pedidos (
-    id SERIAL PRIMARY KEY,
-    id_cliente INT NOT NULL REFERENCES clientes(id),
-    endereco VARCHAR(255) NOT NULL,
-    tamanho VARCHAR(50) NOT NULL,
-    sabor VARCHAR(100) NOT NULL,
-	quantidade INT NULL,
-    data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE sabores (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     valor REAL NOT NULL
 );
+
+CREATE TABLE pedidos (
+    id SERIAL PRIMARY KEY,
+    cliente VARCHAR(100) NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
+    tamanho VARCHAR(50) NOT NULL,
+    id_sabor INT NOT NULL REFERENCES sabores(id),
+	quantidade INT NULL,
+    data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	valor_total REAL NOT NULL
+); --drop table pedidos
+
+
 
 CREATE TABLE itens_pedido (
     id SERIAL PRIMARY KEY,
