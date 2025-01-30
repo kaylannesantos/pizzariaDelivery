@@ -17,7 +17,8 @@ def listar_pedidos(tree):
     conn = conectar_bd()
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT p.id, p.cliente, p.endereco, p.tamanho, s.nome AS sabor 
+        SELECT p.id, p.cliente, p.endereco, p.tamanho, s.nome AS sabor, 
+               p.quantidade, s.valor, p.valor_total
         FROM pedidos p
         JOIN sabores s ON p.id_sabor = s.id
     """)
@@ -28,7 +29,8 @@ def listar_pedidos(tree):
     tree.delete(*tree.get_children())  # Limpa a tabela antes de preencher novamente
 
     for pedido in pedidos:
-        tree.insert("", "end", iid=pedido[0], values=pedido)  # Incluindo o ID corretamente
+        total = pedido[5] * pedido[6]  # Quantidade * Valor unitário
+        tree.insert("", "end", iid=pedido[0], values=(pedido[1], pedido[2], pedido[3], pedido[4], pedido[5], total, pedido[7]))
 
 # Função para excluir pedido
 def excluir_pedido(tree):
@@ -178,7 +180,7 @@ def registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, combo_sab
     # Obter o ID do sabor selecionado
     conn = conectar_bd()
     cursor = conn.cursor()
-    cursor.execute("SELECT id FROM sabores WHERE nome = %s", (sabor_nome,))
+    cursor.execute("SELECT id, valor FROM sabores WHERE nome = %s", (sabor_nome,))
     sabor = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -188,6 +190,10 @@ def registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, combo_sab
         return
 
     sabor_id = sabor[0]  # Pegando o ID do sabor
+    valor_unitario = sabor[1]  # Pegando o valor do sabor
+
+    # Calcular o valor total
+    valor_total = valor_unitario * quantidade
 
     # Inserir os pedidos no banco de dados
     conn = conectar_bd()
@@ -196,8 +202,8 @@ def registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, combo_sab
     try:
         for _ in range(quantidade):
             cursor.execute(
-                "INSERT INTO pedidos (cliente, endereco, tamanho, id_sabor) VALUES (%s, %s, %s, %s)",
-                (cliente, endereco, tamanho, sabor_id),  # Usando o ID do sabor
+                "INSERT INTO pedidos (cliente, endereco, tamanho, id_sabor, quantidade, valor_total) VALUES (%s, %s, %s, %s, %s, %s)",
+                (cliente, endereco, tamanho, sabor_id, quantidade, valor_total),  # Usando o ID do sabor e valor total
             )
         conn.commit()
         messagebox.showinfo("Sucesso", f"{quantidade} Pedido(s) registrado(s) com sucesso!")
@@ -208,6 +214,22 @@ def registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, combo_sab
     finally:
         cursor.close()
         conn.close()
+
+# Função para finalizar o pedido, exibindo o valor total
+def finalizar_pedido(tree):
+    selecionado = tree.selection()
+    if not selecionado:
+        messagebox.showerror("Erro", "Selecione um pedido para finalizar!")
+        return
+    
+    item = tree.item(selecionado)["values"]
+    valor_total = item[6]  # A coluna de valor total
+
+    try:
+        valor_total = float(valor_total)  # Garantir que seja um número (float)
+        messagebox.showinfo("Total do Pedido", f"O valor total do pedido é: R$ {valor_total:.2f}")
+    except ValueError:
+        messagebox.showerror("Erro", "Valor total inválido!")
 
 # Função para abrir a tela de pedidos
 def abrir_tela_pedido():
@@ -256,12 +278,14 @@ def abrir_tela_pedido():
     frame_tabela = tk.Frame(tela_pedido)
     frame_tabela.pack(pady=10)
 
-    tree = ttk.Treeview(frame_tabela, columns=("ID","Cliente", "Endereço", "Tamanho", "Sabor"), show="headings")
-    tree.column("ID", width=0, stretch=tk.NO)
+    tree = ttk.Treeview(frame_tabela, columns=("Cliente", "Endereço", "Tamanho", "Sabor", "Quantidade", "Preço", "Total"), show="headings")
     tree.heading("Cliente", text="Cliente")
     tree.heading("Endereço", text="Endereço")
     tree.heading("Tamanho", text="Tamanho")
     tree.heading("Sabor", text="Sabor")
+    tree.heading("Quantidade", text="Quantidade")
+    tree.heading("Preço", text="Preço Unitário")
+    tree.heading("Total", text="Total")
     tree.pack()
 
     listar_pedidos(tree)
@@ -272,11 +296,11 @@ def abrir_tela_pedido():
 
     tk.Button(frame_botoes, text="Excluir Pedido", command=lambda: excluir_pedido(tree), bg="red", fg="white").pack(side="left", padx=5)
     tk.Button(frame_botoes, text="Atualizar Pedido", command=lambda: atualizar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, entry_sabor), bg="blue", fg="white").pack(side="left", padx=5)
+    tk.Button(frame_botoes, text="Finalizar Pedido", command=lambda: finalizar_pedido(tree), bg="green", fg="white").pack(side="left", padx=5)
 
     tk.Button(frame_form, text="Registrar Pedido", 
             command=lambda: registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, combo_sabor, entry_quantidade),
-            bg="green", fg="white").grid(row=5, column=0, columnspan=2, pady=10)
-
+            bg="orange", fg="black").grid(row=5, column=0, columnspan=3, pady=10)
 
     tela_pedido.mainloop()
 
