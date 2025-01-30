@@ -16,7 +16,11 @@ def autenticar():
 def listar_pedidos(tree):
     conn = conectar_bd()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, cliente, endereco, tamanho, sabor FROM pedidos")
+    cursor.execute("""
+        SELECT p.id, p.cliente, p.endereco, p.tamanho, s.nome AS sabor 
+        FROM pedidos p
+        JOIN sabores s ON p.id_sabor = s.id
+    """)
     pedidos = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -151,16 +155,15 @@ def abrir_tela_cadastro_cliente(nome_cliente):
 
     tk.Button(janela, text="Salvar Cliente", command=lambda: cadastrar_cliente(entry_nome, entry_telefone, entry_endereco, entry_bairro, janela), bg="green", fg="white").pack(pady=10)
 
-# Função para registrar um novo pedido no banco de dados
-def registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, entry_sabor, entry_quantidade):
+def registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, combo_sabor, entry_quantidade):
     cliente = entry_cliente.get()
     endereco = entry_endereco.get()
     tamanho = tamanho_var.get()
-    sabor = entry_sabor.get()
+    sabor_nome = combo_sabor.get()  # Nome do sabor selecionado
     quantidade = entry_quantidade.get()
 
     # Validação dos campos
-    if not cliente or not endereco or not sabor or not quantidade:
+    if not cliente or not endereco or not sabor_nome or not quantidade:
         messagebox.showerror("Erro", "Preencha todos os campos!")
         return
 
@@ -172,14 +175,29 @@ def registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, entry_sab
         messagebox.showerror("Erro", f"Erro na quantidade de pizzas: {e}")
         return
 
+    # Obter o ID do sabor selecionado
+    conn = conectar_bd()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM sabores WHERE nome = %s", (sabor_nome,))
+    sabor = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if not sabor:
+        messagebox.showerror("Erro", "Sabor não encontrado no banco de dados!")
+        return
+
+    sabor_id = sabor[0]  # Pegando o ID do sabor
+
+    # Inserir os pedidos no banco de dados
     conn = conectar_bd()
     cursor = conn.cursor()
     
     try:
         for _ in range(quantidade):
             cursor.execute(
-                "INSERT INTO pedidos (cliente, endereco, tamanho, sabor) VALUES (%s, %s, %s, %s)",
-                (cliente, endereco, tamanho, sabor),
+                "INSERT INTO pedidos (cliente, endereco, tamanho, id_sabor) VALUES (%s, %s, %s, %s)",
+                (cliente, endereco, tamanho, sabor_id),  # Usando o ID do sabor
             )
         conn.commit()
         messagebox.showinfo("Sucesso", f"{quantidade} Pedido(s) registrado(s) com sucesso!")
@@ -218,8 +236,17 @@ def abrir_tela_pedido():
     ttk.Combobox(frame_form, textvariable=tamanho_var, values=["Média", "Grande", "Gigante"], width=28).grid(row=2, column=1, padx=5, pady=5)
 
     tk.Label(frame_form, text="Sabor da Pizza:").grid(row=3, column=0, padx=5, pady=5)
-    entry_sabor = tk.Entry(frame_form, width=30)
-    entry_sabor.grid(row=3, column=1, padx=5, pady=5)
+    combo_sabor = ttk.Combobox(frame_form, width=30)
+    combo_sabor.grid(row=3, column=1, padx=5, pady=5)
+
+    # Preenche a combobox com sabores do banco de dados
+    conn = conectar_bd()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, nome FROM sabores")
+    sabores = cursor.fetchall()
+    combo_sabor['values'] = [sabor[1] for sabor in sabores]
+    cursor.close()
+    conn.close()
 
     tk.Label(frame_form, text="Quantidade de Pizzas:").grid(row=4, column=0, padx=5, pady=5)
     entry_quantidade = tk.Entry(frame_form, width=30)
@@ -247,8 +274,9 @@ def abrir_tela_pedido():
     tk.Button(frame_botoes, text="Atualizar Pedido", command=lambda: atualizar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, entry_sabor), bg="blue", fg="white").pack(side="left", padx=5)
 
     tk.Button(frame_form, text="Registrar Pedido", 
-          command=lambda: registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, entry_sabor, entry_quantidade),
-          bg="green", fg="white").grid(row=5, column=0, columnspan=2, pady=10)
+            command=lambda: registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, combo_sabor, entry_quantidade),
+            bg="green", fg="white").grid(row=5, column=0, columnspan=2, pady=10)
+
 
     tela_pedido.mainloop()
 

@@ -13,6 +13,18 @@ CREATE TABLE sabores (
     nome VARCHAR(100) NOT NULL,
     valor REAL NOT NULL
 );
+INSERT INTO sabores (nome, valor) VALUES
+('Mussarela', 29.90),
+('Calabresa', 32.90),
+('Frango com Catupiry', 34.90),
+('Portuguesa', 35.90),
+('Quatro Queijos', 36.90),
+('Napolitana', 33.90),
+('Pepperoni', 38.90),
+('Veggie', 31.90),
+('Margherita', 33.90),
+('Barbecue Chicken', 37.90);
+
 
 CREATE TABLE pedidos (
     id SERIAL PRIMARY KEY,
