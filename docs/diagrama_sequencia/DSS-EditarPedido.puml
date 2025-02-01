@@ -1,0 +1,32 @@
+
+@startuml DSS - Editar Pedido
+
+    actor Atendente
+    participant "Sistema" as Sys
+    participant "Banco de Dados" as DB
+
+    '1° Atendente solicita tela/lista de pedidos
+    Atendente -> Sys: Solicita Tela de Pedidos
+    Sys --> Atendente: Exibe Lista de Pedidos
+    
+    '2° Seleciona pedido para alteração
+    Atendente -> Sys: Seleciona Pedido para Edição
+    Sys --> Atendente: Exibe tela de edição de Pedido
+
+    alt Cliente solicita mudança no pedido
+        '3° Altera pedido solcicitado
+        Atendente -> Sys: Altera e Confirma Edição
+        activate Sys
+        Sys -> DB: Solicita atualização do pedido
+        activate DB
+        DB -> DB: Atualiza e Salva o pedido
+        DB --> Sys: Retorna "Pedido atualizado com Sucesso."
+        deactivate DB
+        Sys --> Atendente: Exibe Pedido Atualizado
+        deactivate Sys
+    else Cliente não solicita mudança no pedido
+        Atendente -> Sys: Retornar para tela de pedidos
+        Sys --> Atendente: Exibe tela de pedidos
+    end
+
+@enduml

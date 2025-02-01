@@ -1,0 +1,45 @@
+
+@startuml DSS - Cadastrar Cliente
+
+    actor Atendente
+    participant "Sistema" as Sys
+    participant "Banco de Dados" as DB
+
+    '1°Atendente solicita/acessa tela de cadastro
+    Atendente -> Sys: Solicita Cadastrar Cliente
+    Sys --> Atendente: Exibe Tela de Cadastro de Cliente
+
+    '2°Atendente inseri/solicita tela de cadastro
+    Atendente -> Sys: Inseri dados de Cliente
+    Atendente -> Sys: Solicita Verificar Cliente
+    activate Sys
+    
+    '3°Atendente consulta o banco de dados
+    Sys -> DB: Envia dados de Cliente para Consulta
+    activate DB
+    DB -> DB: Consulta Cliente
+    
+    alt Cliente cadastrado
+        DB -> Sys: Retorna "Cliente Cadastrado"
+        deactivate DB
+        Sys -->> Atendente: "Cliente cadastrado."
+        deactivate Sys
+    else Cliente não cadastrado
+        DB -> Sys: Retorna "Cliente não encontrado"
+        deactivate DB
+        Sys -> Atendente: "Cliente não cadastrado."
+        
+        '4°Atendente cadastra novo cliente
+        Atendente -> Sys: Cadastrar cliente(nome,telefone,endereço,bairro)
+        activate Sys
+        Sys -> DB: Envia dados do cliente
+        activate DB
+        DB -> DB: Cadastra cliente
+
+        DB -> Sys: Retorna sucesso
+        deactivate DB
+        Sys -> Atendente: "Cliente Cadastrado com Sucesso."
+        deactivate Sys
+    end
+
+@enduml

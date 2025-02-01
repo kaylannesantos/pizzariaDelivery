@@ -1,0 +1,30 @@
+
+@startuml DSS - Excluir Pedido
+
+    actor Atendente
+    participant "Sistema" as Sys
+    participant "Banco de Dados" as DB
+
+    '1° Atendente solicita tela/lista de pedidos
+    Atendente -> Sys: Solicita Tela de Pedidos
+    Sys --> Atendente: Exibe Lista de Pedidos
+    
+    '2° Atendente Seleciona pedido para remoção
+    Atendente -> Sys: Seleciona Pedido para Exclusão
+    Sys --> Atendente: Exibe detalhes do Pedido
+
+    '3° Atendente confirma remoção de pedido
+    activate Sys
+    Sys --> Atendente: Exibe confirmação para remover pedido
+    Atendente -> Sys: Confirma Exclusão
+
+    activate DB
+    Sys -> DB: Envia solicitação de exclusão do pedido
+    DB -> DB: Remove Pedido
+    DB --> Sys: Retorna Sucesso de Exclusão
+    deactivate DB
+    Sys -->> Atendente: "Pedido Excluído com Sucesso."
+    Sys --> Atendente: Exibe tela de Pedido com dados atualizados
+    deactivate Sys
+
+@enduml

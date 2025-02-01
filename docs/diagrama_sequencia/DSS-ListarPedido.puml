@@ -1,0 +1,18 @@
+
+@startuml DSS - Listar Pedidos
+
+    actor Atendente
+    participant "Sistema" as Sys
+    participant "Banco de Dados" as DB
+    
+    '1° Atendente Solicita Lista de Pedidos
+    activate Sys
+    Atendente -> Sys: Seleciona Listar Pedidos
+    activate DB
+    Sys -> DB: Solicita Lista de Pedidos
+    DB --> Sys: Retorna Lista de Pedidos
+    deactivate DB
+    Sys --> Atendente: Exibe Lista de Pedidos
+    deactivate Sys
+
+@enduml

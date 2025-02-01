@@ -1,0 +1,24 @@
+@startuml DSS - Login
+
+    actor Atendente
+    participant "Sistema" as Sys
+    participant "Banco de Dados" as DB
+
+    Atendente -> Sys: Login: Insere credenciais
+    activate Sys
+    Sys -> DB: Envia credenciais
+    activate DB
+    DB -> DB: Consulta crendencias do atendente
+    alt Credenciais corretas
+        DB --> Sys: Retorna sucesso
+        deactivate DB
+        Sys --> Atendente: Exibe tela inicial
+        deactivate Sys
+    else Credenciais inválidas
+        DB --> Sys: Retorna erro
+        deactivate DB
+        Sys --> Atendente: Exibe mensagem de erro
+        deactivate Sys
+    end
+
+@enduml

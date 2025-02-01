@@ -1,0 +1,23 @@
+
+@startuml DSS - Registrar Pedido
+
+    actor Atendente
+    participant "Sistema" as Sys
+    participant "Banco de Dados" as DB
+    
+    '1°Atendente acessa tela de realizar pedido
+    Atendente -> Sys: Solicita Registrar Pedido
+    Sys --> Atendente: Exibe Tela de Registrar Pedido
+
+    '2°Atendente regsitra o pedido do cliente
+    Atendente -> Sys: Registra pedido(nome_cliente,telefone,endereco,bairro)
+    activate Sys
+    Sys -> DB: Envia os dados do pedido
+    activate DB
+    DB -> DB: Registra o pedido
+    DB --> Sys: Retorna "Pedido Criado com Sucesso."
+    deactivate DB
+    Sys --> Atendente: "Pedido Criado com Sucesso."
+    deactivate Sys
+
+@enduml
