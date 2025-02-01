@@ -1,4 +1,4 @@
-# Pizzaria Delivery - Projeto Final
+# Pizzaria Delivery - Projeto Final (Disc.: Análise e Projeto de Sistemas)
 
 ## 📌 Sobre o Projeto
 O **Pizzaria Delivery**🍕 é um sistema desenvolvido para automatizar o processo de pedidos de pizza, facilitando o registro de clientes e pedidos, garantindo persistência dos dados e permitindo consulta e edição de pedidos.
@@ -36,9 +36,7 @@ pizzariaDelivery/
 │── README.md                  # Guia do projeto
 ```
 
-## 📜 Como Rodar o Projeto
-
-### 🔧 Pré-requisitos
+### 🔧 Pré-requisitos para Rodar o Projeto
 - **Biblioteca psycopg2**: Para conectar ao PostgreSQL.
    ```bash
    pip install psycopg2
@@ -49,7 +47,7 @@ pizzariaDelivery/
 <!--## **Configuração do Banco de Dados**
 ### Criar Banco de Dados e Tabela:-->
 
-### 🏃 Passos para rodar
+### 🏃 Passos para rodar a aplicação
 1. Clone este repositório:
    ```sh
    git clone https://github.com/kaylannesantos/pizzariaDelivery.git
@@ -79,7 +77,6 @@ pizzariaDelivery/
    --ou
    python -m src.pizzaria
    ```
-
 6. Faça login com as credenciais padrão:
    - **Usuário**: `admin`
    - **Senha**: `1234`

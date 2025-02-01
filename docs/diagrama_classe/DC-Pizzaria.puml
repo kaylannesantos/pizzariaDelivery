@@ -1,0 +1,35 @@
+@startuml Diagrama de Classe - Pizzaria
+
+class Cliente {
+    +nome: String
+    +telefone: String
+    +endereco: String
+    '+realizarPedido(pedido: Pedido):void
+}
+
+class Atendente {
+    +nome: String
+    +registrarPedido(cliente: Cliente, pedido: Pedido)
+}
+
+class Pizza {
+    +tamanho: String /'"Média", "Grande", "Gigante"'/
+    +sabor: String
+    +preco: float
+}
+
+class Pedido {
+    +id: int
+    +dataHora: DateTime
+    +status: String
+    +cliente: Cliente
+    +pizzas: List<Pizza>
+    +valorTotal: float
+    +calcularTotal(): float
+}
+
+Cliente "1..1" -left-> "1..1" Atendente : comunica-se
+Atendente "1..1" -- "*" Pedido : realiza
+Pedido "1..1" -- "*" Pizza : tem
+
+@enduml
