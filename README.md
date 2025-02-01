@@ -46,8 +46,8 @@ pizzariaDelivery/
 - Python instalado
 - PostgreSQL configurado
 
-## **Configuração do Banco de Dados**
-### Criar Banco de Dados e Tabela:
+<!--## **Configuração do Banco de Dados**
+### Criar Banco de Dados e Tabela:-->
 
 ### 🏃 Passos para rodar
 1. Clone este repositório:
@@ -76,6 +76,8 @@ pizzariaDelivery/
 5. Execute o arquivo Python no terminal:
    ```bash
    python src/pizzaria.py
+   --ou
+   python -m src.pizzaria
    ```
 
 6. Faça login com as credenciais padrão:
