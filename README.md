@@ -1,46 +1,68 @@
-# Pizzaria - Sistema de Controle de Pedidos
+# Pizzaria Delivery - Projeto Final
 
-## **Pré-requisitos**
+## 📌 Sobre o Projeto
+O **Pizzaria Delivery**🍕 é um sistema desenvolvido para automatizar o processo de pedidos de pizza, facilitando o registro de clientes e pedidos, garantindo persistência dos dados e permitindo consulta e edição de pedidos.
 
-1. **Biblioteca psycopg2**: Para conectar ao PostgreSQL. Instale com:
+## 🚀 Tecnologias Utilizadas
+- **Backend:** Python
+- **Frontend:** Tkinter
+- **Banco de Dados:** PostgreSQL
+- **Outras Tecnologias:** [Docker, Firebase, etc.]
+
+## 🛠️ Funcionalidades
+- Cadastro de clientes e pedidos
+- Listar Pedidos
+- Editar Pedido
+- Histórico de Pedidos
+- Tela de Login
+- Persistência de dados no banco de dados.
+
+## 📂 Estrutura do Repositório
+```
+pizzariaDelivery/
+│── docs/                      # Documentação do sistema
+│   ├── casos_de_uso/          # Diagramas e descrições de casos de uso
+│   ├── diagramas/             # Diagramas UML (sequência, classes, etc.)
+│   ├── figma/                 # Protótipo do Figma
+│   ├── mapeamento_classes/    # Modelagem das classes do sistema
+│   ├── especificacoes.pdf     # Documento com especificações
+│── src/                       # Código-fonte da aplicação
+│   ├── backend/               # Código do backend
+│   ├── frontend/              # Código do frontend (Tkinter)
+│── database/                  # Arquivos relacionados ao banco de dados
+│   ├── scripts/               # Scripts de criação e manipulação
+│   ├── backups/               # Backups do banco de dados
+│── .gitignore                 
+│── README.md                  # Guia do projeto
+```
+
+## 📜 Como Rodar o Projeto
+
+### 🔧 Pré-requisitos
+- **Biblioteca psycopg2**: Para conectar ao PostgreSQL.
    ```bash
    pip install psycopg2
    ```
-2. **PostgreSQL**: Instale e configure o PostgreSQL no seu computador.
-
----
+- Python instalado
+- PostgreSQL configurado
 
 ## **Configuração do Banco de Dados**
-
 ### Criar Banco de Dados e Tabela:
-1. Crie o banco de dados "pizzaria":
-   ```sql
-   CREATE DATABASE pizzaria;
+
+### 🏃 Passos para rodar
+1. Clone este repositório:
+   ```sh
+   git clone https://github.com/kaylannesantos/pizzariaDelivery.git
    ```
-
-2. Acesse o banco de dados criado:
-   ```sql
-   \c pizzaria
+2. Acesse a pasta do projeto:
+   ```sh
+   cd pizzariaDelivery
    ```
-
-3. Crie a tabela `pedidos`:
-   ```sql
-   CREATE TABLE pedidos (
-       id SERIAL PRIMARY KEY,
-       cliente VARCHAR(100) NOT NULL,
-       endereco VARCHAR(255) NOT NULL,
-       tamanho VARCHAR(50) NOT NULL,
-       sabor VARCHAR(100) NOT NULL,
-       data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-   );
+3. Instale as dependências:
+   ```sh
+   pip install -r requirements.txt
    ```
----
-
-## **Configuração do Código**
-
-1. Clone este repositório ou copie o arquivo do código para o seu ambiente.
-
-2. Abra o arquivo Python e configure os dados da conexão com o banco de dados na função `conectar_bd`:
+4. Abra o arquivo Python e configure os dados da conexão com o banco de dados na função `conectar_bd`:
    ```python
    def conectar_bd():
        return psycopg2.connect(
@@ -51,36 +73,36 @@
            port="5432"
        )
    ```
----
-
-## **Como Executar**
-
-1. Execute o arquivo Python no terminal:
+5. Execute o arquivo Python no terminal:
    ```bash
-   python pizzaria.py
+   python src/pizzaria.py
    ```
 
-2. Faça login com as credenciais padrão:
+6. Faça login com as credenciais padrão:
    - **Usuário**: `admin`
    - **Senha**: `1234`
 
-3. Preencha os dados do cliente e do pedido na interface gráfica.
 
-4. Clique em **"Registrar Pedido"** para salvar o pedido no banco de dados PostgreSQL.
+## 📖 Documentação
+A documentação completa do projeto está disponível na pasta `docs/` e inclui:
+- Diagramas de Casos de Uso
+- Descrição dos Casos de Uso
+- Diagramas de Sequência
+- Diagrama de Classes
+- Protótipo no Figma
+- Mapeamento de Classes
+- Documento com Especificações
+
+## 🗄️ Banco de Dados
+Os arquivos relacionados ao banco de dados estão na pasta `database/` e incluem:
+- **Scripts**: SQL para criação e manipulação do banco
+- **Backups**: Arquivos de backup para recuperação
+
+## 🚀 Hospedagem
+Atualmente, a hospedagem da aplicação ainda está em análise.
+
+## 👥 Equipe
+- **Kaylanne Santos**
+- **Lays Emanuelly**
 
 ---
-
-## **Funcionalidades exigidas no trabalho**
-- Tela de Login.
-- Registro de clientes e pedidos com interface gráfica.
-- Persistência de dados no banco de dados.
-
----
-
-## **Falta**
-- Implementar funcionalidades adicionais, como consulta e edição de pedidos.
-- Melhorar a interface gráfica.
-- Adicionar suporte a múltiplos sabores por pizza.
-
----
-
