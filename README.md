@@ -1,4 +1,8 @@
-# Pizzaria Delivery - Projeto Final (Disc.: Análise e Projeto de Sistemas)
+# **Pizzaria Delivery - Projeto Final (Disc.: Análise e Projeto de Sistemas)**
+
+## 👥 Equipe
+- **Kaylanne Mendes dos Santos**
+- **Lays Emanuelly dos Santos Lima**
 
 ## 📌 Sobre o Projeto
 O **Pizzaria Delivery**🍕 é um sistema desenvolvido para automatizar o processo de pedidos de pizza, facilitando o registro de clientes e pedidos, garantindo persistência dos dados e permitindo consulta e edição de pedidos.
@@ -7,12 +11,12 @@ O **Pizzaria Delivery**🍕 é um sistema desenvolvido para automatizar o proces
 - **Backend:** Python
 - **Frontend:** Tkinter
 - **Banco de Dados:** PostgreSQL
-- **Outras Tecnologias:** [Docker, Firebase, etc.]
+- **Protótipo:** Figma
 
 ## 🛠️ Funcionalidades
-- Cadastro de clientes e pedidos
-- Listar Pedidos
-- Editar Pedido
+- Cadastrar Cliente
+- Registrar Pedido
+- Pagar Pedido
 - Histórico de Pedidos
 - Tela de Login
 - Persistência de dados no banco de dados.
@@ -27,20 +31,18 @@ pizzariaDelivery/
 │   ├── mapeamento_classes/    # Modelagem das classes do sistema
 │   ├── especificacoes.pdf     # Documento com especificações
 │── src/                       # Código-fonte da aplicação
+│   ├── images/                # imagens usadas na aplicação
 │   ├── backend/               # Código do backend
 │   ├── frontend/              # Código do frontend (Tkinter)
-│── database/                  # Arquivos relacionados ao banco de dados
-│   ├── scripts/               # Scripts de criação e manipulação
-│   ├── backups/               # Backups do banco de dados
-│── .gitignore                 
+│   │── database/              # Arquivos relacionados ao banco de dados
+│   │   ├── scripts/           # Scripts de criação e manipulação
+│   │   ├── backups/           # Backups do banco de dados
+│── .gitignore   
 │── README.md                  # Guia do projeto
+│── requirements.txt           # Dependências                  
 ```
 
 ### 🔧 Pré-requisitos para Rodar o Projeto
-- **Biblioteca psycopg2**: Para conectar ao PostgreSQL.
-   ```bash
-   pip install psycopg2
-   ```
 - Python instalado
 - PostgreSQL configurado
 
@@ -60,7 +62,7 @@ pizzariaDelivery/
    ```sh
    pip install -r requirements.txt
    ```
-4. Abra o arquivo Python e configure os dados da conexão com o banco de dados na função `conectar_bd`:
+4. Abra o arquivo Python em `src/database` e configure os dados da conexão com o banco de dados na função `conectar_bd`:
    ```python
    def conectar_bd():
        return psycopg2.connect(
@@ -81,7 +83,6 @@ pizzariaDelivery/
    - **Usuário**: `admin`
    - **Senha**: `1234`
 
-
 ## 📖 Documentação
 A documentação completa do projeto está disponível na pasta `docs/` e inclui:
 - Diagramas de Casos de Uso
@@ -93,15 +94,7 @@ A documentação completa do projeto está disponível na pasta `docs/` e inclui
 - Documento com Especificações
 
 ## 🗄️ Banco de Dados
-Os arquivos relacionados ao banco de dados estão na pasta `database/` e incluem:
-- **Scripts**: SQL para criação e manipulação do banco
-- **Backups**: Arquivos de backup para recuperação
-
-## 🚀 Hospedagem
-Atualmente, a hospedagem da aplicação ainda está em análise.
-
-## 👥 Equipe
-- **Kaylanne Santos**
-- **Lays Emanuelly**
-
+Os arquivos relacionados ao banco de dados estão na pasta `src/database` e incluem:
+- **db.py**: SQL para criação e manipulação do banco
+- **backups.sql**: Arquivos de backup para recuperação
 ---
