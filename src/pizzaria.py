@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from database.db import conectar_bd
+from src.database.db import conectar_bd
 
 # Função de autenticação (simulação)
 def autenticar():
@@ -14,8 +14,9 @@ def autenticar():
 
 # Função para listar pedidos
 def listar_pedidos(tree):
-    conn = conectar_bd()
-    cursor = conn.cursor()
+    conn, cursor = conectar_bd()
+    if not conn or not cursor:
+        return []
     cursor.execute("""
         SELECT p.id, p.cliente, p.endereco, p.tamanho, s.nome AS sabor, 
                p.quantidade, s.valor, p.valor_total
@@ -42,8 +43,9 @@ def excluir_pedido(tree):
     item = tree.item(selecionado)["values"]
     pedido_id = tree.selection()[0]  # O iid do item é o ID do pedido
 
-    conn = conectar_bd()
-    cursor = conn.cursor()
+    conn, cursor = conectar_bd()
+    if not conn or not cursor:
+        return []
     cursor.execute("DELETE FROM pedidos WHERE id = %s", (pedido_id,))
     conn.commit()
     cursor.close()
@@ -90,9 +92,10 @@ def verificar_cliente(entry_endereco):
         messagebox.showerror("Erro", "Digite o nome do cliente!")
         return
     
-    conn = conectar_bd()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM clientes WHERE nome = %s", (nome_cliente,))
+    conn, cursor = conectar_bd()
+    if not conn or not cursor:
+        return []
+    cursor.execute("SELECT * FROM clientes WHERE nome = %s", (nome_cliente))
     cliente = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -119,8 +122,9 @@ def cadastrar_cliente(entry_nome, entry_telefone, entry_endereco, entry_bairro, 
         messagebox.showerror("Erro", "Preencha todos os campos!")
         return
 
-    conn = conectar_bd()
-    cursor = conn.cursor()
+    conn, cursor = conectar_bd()
+    if not conn or not cursor:
+        return []
     cursor.execute(
         "INSERT INTO clientes (nome, telefone, endereco, bairro) VALUES (%s, %s, %s, %s)",
         (nome, telefone, endereco, bairro),
@@ -178,8 +182,9 @@ def registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, combo_sab
         return
 
     # Obter o ID do sabor selecionado
-    conn = conectar_bd()
-    cursor = conn.cursor()
+    conn, cursor = conectar_bd()
+    if not conn or not cursor:
+        return []
     cursor.execute("SELECT id, valor FROM sabores WHERE nome = %s", (sabor_nome,))
     sabor = cursor.fetchone()
     cursor.close()
@@ -196,8 +201,9 @@ def registrar_pedido(tree, entry_cliente, entry_endereco, tamanho_var, combo_sab
     valor_total = valor_unitario * quantidade
 
     # Inserir os pedidos no banco de dados
-    conn = conectar_bd()
-    cursor = conn.cursor()
+    conn, cursor = conectar_bd()
+    if not conn or not cursor:
+        return []
     
     try:
         for _ in range(quantidade):
@@ -262,8 +268,9 @@ def abrir_tela_pedido():
     combo_sabor.grid(row=3, column=1, padx=5, pady=5)
 
     # Preenche a combobox com sabores do banco de dados
-    conn = conectar_bd()
-    cursor = conn.cursor()
+    conn, cursor = conectar_bd()
+    if not conn or not cursor:
+        return []
     cursor.execute("SELECT id, nome FROM sabores")
     sabores = cursor.fetchall()
     combo_sabor['values'] = [sabor[1] for sabor in sabores]
