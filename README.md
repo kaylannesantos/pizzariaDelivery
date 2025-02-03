@@ -44,8 +44,8 @@ pizzariaDelivery/
 - Python instalado
 - PostgreSQL configurado
 
-<!--## **Configuração do Banco de Dados**
-### Criar Banco de Dados e Tabela:-->
+## **Configuração do Banco de Dados**
+### Criar Banco de Dados e Tabela:
 
 ### 🏃 Passos para rodar a aplicação
 1. Clone este repositório:

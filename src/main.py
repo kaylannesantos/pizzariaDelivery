@@ -1,8 +1,8 @@
-from src.home import home
 from src.login import criar_tela_login, autenticar
 from src.cliente import abrir_tela_cadastro_cliente
 from src.registrar import abrir_tela_pedido
 from src.historico import RegistroPedido
+from src.home import home
 
 def main():
     # Função de callback para verificar o login
