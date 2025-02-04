@@ -1,0 +1,31 @@
+@startuml Casos de Uso - Pizzaria
+
+actor Atendente
+
+rectangle Pizzaria {
+    usecase "Tela Home" as TelaHome
+    usecase "Login" as Login
+    usecase "Histórico de Pedidos" as HistoricoPedidos
+    usecase "Excluir Pedido" as ExcluirPedido
+    usecase "Editar Pedido" as EditarPedido
+    usecase "Listar Pedido" as ListarPedido
+    usecase "Cadastrar Cliente" as CadastrarCliente
+    usecase "Verificar Cliente" as VerificarCliente
+    usecase "Registrar Pedido" as RegistrarPedido
+    usecase "Efetuar Pagamento" as EfetuarPagamento
+}
+
+Atendente -- TelaHome
+TelaHome --> Login : <<include>>
+TelaHome --> HistoricoPedidos
+TelaHome --> RegistrarPedido
+TelaHome --> EfetuarPagamento
+
+HistoricoPedidos --> ExcluirPedido : remove
+HistoricoPedidos --> EditarPedido : modify
+HistoricoPedidos --> ListarPedido : view
+
+RegistrarPedido --> VerificarCliente : <<include>>
+VerificarCliente --> CadastrarCliente : <<extend>>
+
+@enduml

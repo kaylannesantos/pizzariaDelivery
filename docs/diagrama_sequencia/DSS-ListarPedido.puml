@@ -1,5 +1,5 @@
 
-@startuml DSS - Listar Pedidos
+@startuml DSS - Listar Pedidos(historico)
 
     actor Atendente
     participant "Sistema" as Sys

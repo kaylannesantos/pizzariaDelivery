@@ -10,7 +10,7 @@
     Sys --> Atendente: Exibe Tela de Registrar Pedido
 
     '2°Atendente regsitra o pedido do cliente
-    Atendente -> Sys: Registra pedido(nome_cliente,telefone,endereco,bairro)
+    Atendente -> Sys: Registra pedido
     activate Sys
     Sys -> DB: Envia os dados do pedido
     activate DB

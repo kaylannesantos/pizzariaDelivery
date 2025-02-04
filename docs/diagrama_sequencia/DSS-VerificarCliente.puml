@@ -1,0 +1,34 @@
+
+@startuml DSS - Verificar Cliente
+
+    actor Atendente
+    participant "Sistema" as Sys
+    participant "Banco de Dados" as DB
+
+    ' Atendente insere os dados do cliente
+    Atendente -> Sys: Inseri dados de Cliente
+    Sys --> Atendente: Exibe dados inseridos
+
+    ' Atendente solicita a verificação do cliente
+    Atendente -> Sys: Seleciona "Verificar Cliente"
+    activate Sys 
+
+    ' Sistema envia os dados para consulta no banco
+    Sys -> DB: Envia dados de Cliente para Consulta
+    activate DB
+    DB -> DB: Consulta Cliente
+    
+    ' Resposta do banco de dados
+    alt Cliente cadastrado
+        DB --> Sys: Retorna "Cliente Cadastrado"
+        deactivate DB
+        Sys --> Atendente: "Cliente cadastrado."
+        deactivate Sys
+    else Cliente não cadastrado
+        DB --> Sys: Retorna "Cliente não encontrado"
+        deactivate DB
+        Sys --> Atendente: "Cliente não cadastrado."
+        deactivate Sys
+    end
+
+@enduml

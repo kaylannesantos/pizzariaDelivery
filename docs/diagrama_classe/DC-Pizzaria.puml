@@ -1,3 +1,4 @@
+
 @startuml Diagrama de Classe - Pizzaria
 
 class Cliente {
