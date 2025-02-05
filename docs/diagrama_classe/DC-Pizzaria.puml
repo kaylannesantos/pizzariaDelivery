@@ -1,4 +1,4 @@
-@startuml Digrama de Classe - Pizzaria
+@startuml Diagrama de Classe - Pizzaria
 
 class Cliente {
     +nome: String
@@ -32,7 +32,7 @@ class Pedido {
     +pagarPedido(): void
 }
 
-Cliente "1..1" -left-> "1..1" Atendente : comunica-se
+Cliente "1..1" -left-> "1..1" Atendente : apenas fornecido ao atendente
 Atendente "1..1" -- "*" Pedido : gerencia
 Pedido "1..1" -- "*" Pizza : contém
 
